@@ -62,13 +62,6 @@ export interface SiteConfig {
     subline: string;
     primaryCta: string;
     secondaryCta: string;
-    floatingCards: {
-      id: string;
-      title: string;
-      tag: string;
-      image: string;
-      slug: string;
-    }[];
   };
   marqueeItems: string[];
   about: {

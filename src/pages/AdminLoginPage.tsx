@@ -7,7 +7,7 @@ import { ThemeToggle } from "../components/ThemeToggle";
 
 export function AdminLoginPage() {
   const { navigate } = useRouter();
-  const [email, setEmail] = useState("saeed@saeedahmed.design");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -122,12 +122,6 @@ export function AdminLoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 border-t border-border pt-4 text-xs text-muted">
-            <p className="font-medium text-foreground">Local studio access</p>
-            <p className="mt-1 font-mono">
-              saeed@saeedahmed.design · portfolio2026
-            </p>
-          </div>
         </div>
       </div>
     </main>
