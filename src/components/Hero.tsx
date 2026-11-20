@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { siteConfig } from "../config/site";
-import type { Work } from "../lib/types";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useRouter } from "../hooks/useRouter";
 import { FloatingCards } from "./FloatingCards";
 import { MagneticButton } from "./MagneticButton";
 import { SplitText } from "./SplitText";
 
-export function Hero({ works }: { works: Work[] }) {
+export function Hero() {
   const { scrollToTarget } = useRouter();
   const reducedMotion = useReducedMotion();
   const [preloaderDone, setPreloaderDone] = useState(() => {
@@ -106,7 +105,7 @@ export function Hero({ works }: { works: Work[] }) {
           </div>
 
           <div className="lg:col-span-5">
-            <FloatingCards ready={preloaderDone} works={works} />
+            <FloatingCards ready={preloaderDone} />
           </div>
         </div>
 

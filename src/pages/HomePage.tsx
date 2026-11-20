@@ -42,7 +42,7 @@ export function HomePage() {
     <>
       <Navbar />
       <main id="main-content">
-        <Hero works={works} />
+        <Hero />
         <Marquee />
         <WorkGrid works={works} isLoading={loading} error={error} />
         <About />

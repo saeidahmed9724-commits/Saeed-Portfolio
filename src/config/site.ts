@@ -5,6 +5,7 @@ export const GENERATED_ASSETS = {
   skincare: "/src/assets/images/work_skincare_ad_1795206548694.jpg",
   coffee: "/src/assets/images/work_coffee_brand_1795206548044.jpg",
   summer: "/src/assets/images/work_summer_capsule_1795206548883.jpg",
+  portrait: "/src/assets/images/portrait_saeed_1795206548690.jpg",
 } as const;
 
 export const siteConfig: SiteConfig = {
@@ -43,6 +44,29 @@ export const siteConfig: SiteConfig = {
       "Social media designer crafting high-converting Instagram carousels, paid ad creatives, and brand-aligned visuals for international DTC brands.",
     primaryCta: "View my work",
     secondaryCta: "Let's talk",
+    floatingCards: [
+      {
+        id: "hero-card-1",
+        title: "Brazilian Haircare Launch",
+        tag: "Carousel · 8 Slides",
+        image: GENERATED_ASSETS.haircare,
+        slug: "brazilian-haircare-launch-carousel",
+      },
+      {
+        id: "hero-card-2",
+        title: "Q4 Paid Meta Creative",
+        tag: "Ad Creative · 4:5",
+        image: GENERATED_ASSETS.skincare,
+        slug: "q4-conversion-meta-ad-pack",
+      },
+      {
+        id: "hero-card-3",
+        title: "Artisan Coffee Feed",
+        tag: "Brand Content · IG",
+        image: GENERATED_ASSETS.coffee,
+        slug: "artisan-coffee-brand-feed-overhaul",
+      },
+    ],
   },
 
   marqueeItems: [
@@ -56,11 +80,9 @@ export const siteConfig: SiteConfig = {
   about: {
     eyebrow: "About Me",
     heading: "Design built for the thumb-scroll era.",
-    // Add your own photo path here (e.g. "/src/assets/images/saeed.jpg").
-    // While empty, a neutral placeholder is shown instead of a stock face.
-    portraitImage: "",
+    portraitImage: GENERATED_ASSETS.portrait,
     portraitAlt:
-      "Saeed Ahmed, Social Media Designer in Alexandria, Egypt",
+      "Portrait of Saeed Ahmed, Social Media Designer in Alexandria, Egypt",
     bio: [
       "I'm Saeed Ahmed, a social media designer based in Alexandria, Egypt with 1+ years of hands-on experience building visual systems that turn passive scrollers into engaged buyers.",
       "I've partnered with ambitious international brands—including a fast-growing Brazilian haircare brand—to craft cohesive Instagram carousels, performance ad creatives, and campaign storytelling tailored for modern feeds.",

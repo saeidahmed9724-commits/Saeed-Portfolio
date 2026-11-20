@@ -1,43 +1,11 @@
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import type { Work } from "../lib/types";
-import { getCategoryLabel } from "../lib/portfolioLogic";
+import { siteConfig } from "../config/site";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useRouter } from "../hooks/useRouter";
 import { MediaFrame } from "./MediaFrame";
 
-interface HeroCard {
-  title: string;
-  tag: string;
-  image: string;
-  slug: string;
-}
-
-/** Picks up to 3 random published works (with a cover) each time the page loads. */
-function pickRandomCards(works: Work[]): Array<HeroCard | null> {
-  const pool = works.filter((w) => w.cover_image_url);
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  const picked: HeroCard[] = pool.slice(0, 3).map((w) => ({
-    title: w.title,
-    tag: `${getCategoryLabel(w.category)}${w.year ? ` · ${w.year}` : ""}`,
-    image: w.cover_image_url as string,
-    slug: w.slug,
-  }));
-  // Slots: [left, center, right]. With fewer than 3 works the center card is
-  // filled first so the hero never looks lopsided.
-  return [picked[1] ?? null, picked[0] ?? null, picked[2] ?? null];
-}
-
-export function FloatingCards({
-  ready,
-  works,
-}: {
-  ready: boolean;
-  works: Work[];
-}) {
+export function FloatingCards({ ready }: { ready: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
   const { navigate } = useRouter();
@@ -51,8 +19,7 @@ export function FloatingCards({
   const yCard2 = useTransform(scrollYProgress, [0, 1], [0, -84]);
   const yCard3 = useTransform(scrollYProgress, [0, 1], [0, -34]);
 
-  // Shuffle once per page load (works only changes when the list first loads).
-  const cards = useMemo(() => pickRandomCards(works), [works]);
+  const cards = siteConfig.hero.floatingCards;
 
   return (
     <div
