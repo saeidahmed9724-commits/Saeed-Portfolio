@@ -1,4 +1,5 @@
 import type { Message, Work, WorkCategory, WorkWithImages } from "./types";
+import { getBrowserSupabase, STORAGE_BUCKET } from "./supabaseClient";
 
 async function parseJson<T>(res: Response): Promise<T> {
   const data = (await res.json().catch(() => ({}))) as T & { error?: string };
@@ -78,19 +79,43 @@ export async function fetchAdminDashboard(): Promise<{
   return parseJson<{ email: string; works: Work[]; messages: Message[] }>(res);
 }
 
-export async function fileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        resolve(reader.result);
-      } else {
-        reject(new Error("Could not read image file."));
-      }
-    };
-    reader.onerror = () => reject(new Error("Could not read image file."));
-    reader.readAsDataURL(file);
+/**
+ * Uploads files straight to Supabase Storage using one-time signed URLs from
+ * the server, and returns the stored object paths in the same order.
+ */
+export async function uploadImages(
+  slug: string,
+  files: File[]
+): Promise<string[]> {
+  if (files.length === 0) return [];
+
+  const res = await fetch("/api/admin/upload-urls", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify({
+      slug,
+      files: files.map((f) => ({
+        filename: f.name,
+        contentType: f.type,
+        size: f.size,
+      })),
+    }),
   });
+  const { uploads } = await parseJson<{
+    uploads: Array<{ path: string; token: string }>;
+  }>(res);
+
+  const storage = getBrowserSupabase().storage.from(STORAGE_BUCKET);
+  await Promise.all(
+    uploads.map(async (u, i) => {
+      const { error } = await storage.uploadToSignedUrl(u.path, u.token, files[i], {
+        contentType: files[i].type,
+      });
+      if (error) throw new Error(`Image upload failed: ${error.message}`);
+    })
+  );
+  return uploads.map((u) => u.path);
 }
 
 export async function createAdminWork(payload: {
@@ -104,10 +129,9 @@ export async function createAdminWork(payload: {
   tools: string[];
   sort_order: number;
   published: boolean;
-  coverImage: { dataUrl?: string; filename?: string; presetUrl?: string };
+  coverImage: { path?: string; presetUrl?: string };
   galleryImages: Array<{
-    dataUrl?: string;
-    filename?: string;
+    path?: string;
     presetUrl?: string;
     alt?: string;
   }>;

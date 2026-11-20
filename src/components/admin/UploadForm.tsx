@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import type { WorkCategory } from "../../lib/types";
 import { GENERATED_ASSETS } from "../../config/site";
-import { createAdminWork, fileToDataUrl } from "../../lib/api";
+import { createAdminWork, uploadImages } from "../../lib/api";
 import {
   parseToolsList,
   slugify,
@@ -92,20 +92,21 @@ export function UploadForm({ onSuccess }: { onSuccess: () => void }) {
 
     setUploading(true);
     try {
-      const coverImage = coverFile
-        ? {
-            dataUrl: await fileToDataUrl(coverFile),
-            filename: coverFile.name,
-          }
-        : { presetUrl: coverPresetUrl! };
+      // Upload cover + gallery in one batch directly to Supabase Storage.
+      const filesToUpload = [
+        ...(coverFile ? [coverFile] : []),
+        ...galleryItems.map((item) => item.file),
+      ];
+      const paths = await uploadImages(cleanSlug, filesToUpload);
 
-      const galleryImages = await Promise.all(
-        galleryItems.map(async (item) => ({
-          dataUrl: await fileToDataUrl(item.file),
-          filename: item.file.name,
-          alt: item.alt,
-        }))
-      );
+      const coverImage = coverFile
+        ? { path: paths[0] }
+        : { presetUrl: coverPresetUrl! };
+      const galleryOffset = coverFile ? 1 : 0;
+      const galleryImages = galleryItems.map((item, i) => ({
+        path: paths[galleryOffset + i],
+        alt: item.alt,
+      }));
 
       await createAdminWork({
         title: title.trim(),
