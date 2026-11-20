@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saeed Ahmed — Social Media Designer | Alexandria, Egypt</title>
+    <meta
+      name="description"
+      content="Portfolio of Saeed Ahmed, a social media designer based in Alexandria, Egypt specializing in Instagram carousels, paid ad creatives, and brand-aligned social content for international brands."
+    />
+    <meta property="og:title" content="Saeed Ahmed — Social Media Designer | Alexandria, Egypt" />
+    <meta
+      property="og:description"
+      content="Portfolio of Saeed Ahmed, a social media designer crafting high-converting Instagram carousels, paid ad creatives, and brand-aligned visuals."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("saeed_portfolio_theme");
+          var dark =
+            stored === "dark" ||
+            (!stored &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          if (dark) {
+            document.documentElement.classList.add("dark");
+            document.documentElement.style.colorScheme = "dark";
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen bg-background text-foreground antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
